@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .pulse-accent {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .waveform-bar {
+    width: 3px;
+    background-color: #6366F1;
+    border-radius: 4px;
+    transition: height 0.3s ease;
+  }
+  
+  .ai-pulse {
+    animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #E2E8F0;
+    border-radius: 10px;
+  }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { opacity: 1; transform: scale(1); border-color: #6366F1; }
+  50% { opacity: 0.5; transform: scale(1.1); border-color: #818cf8; }
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(99, 102, 241, 0.4); opacity: 1; }
+  50% { border-color: rgba(99, 102, 241, 1); opacity: 0.7; }
+}
