@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { authFetch } from './authFetch';
 import LoginPage from './LoginPage';
 import SignUpPage from './SignUpPage';
 
@@ -16,7 +17,7 @@ function App() {
   const [profile, setProfile] = useState({
     name: localStorage.getItem('userName') || 'User',
     email: localStorage.getItem('userEmail') || '',
-    title: 'Meeting Intelligence User',
+    title: localStorage.getItem('userDesignation') || 'Meeting Intelligence User',
     department: 'Product & Innovation',
     organization: 'Debrief.io',
     joined: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -67,7 +68,7 @@ function App() {
   const fetchMeetings = async () => {
     setLoadingMeetings(true);
     try {
-      const response = await fetch('/api/v1/meetings');
+      const response = await authFetch('/api/v1/meetings');
       if (response.ok) {
         const data = await response.json();
         setMeetings(data);
@@ -89,7 +90,7 @@ function App() {
       const fetchExtractedItems = async () => {
         setLoadingItems(true);
         try {
-          const response = await fetch(`/api/v1/meetings/${selectedMeeting.id}/extracted-items`);
+          const response = await authFetch(`/api/v1/meetings/${selectedMeeting.id}/extracted-items`);
           if (response.ok) {
             const data = await response.json();
             setExtractedItems(data);
@@ -194,7 +195,7 @@ function App() {
         stepStates: { ...prev.stepStates, upload: 'done', transcribe: 'active' }
       }));
 
-      const response = await fetch('/api/v1/meetings/upload-audio', {
+      const response = await authFetch('/api/v1/meetings/upload-audio', {
         method: 'POST',
         body: formData
       });
@@ -261,9 +262,8 @@ function App() {
     setChatLoading(true);
 
     try {
-      const response = await fetch('/api/chat/ask', {
+      const response = await authFetch('/api/chat/ask', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           question: userMsg,
           meetingId: meetId
@@ -342,7 +342,9 @@ function App() {
             ...prev,
             name: localStorage.getItem('userName') || prev.name,
             email: localStorage.getItem('userEmail') || prev.email,
+            title: localStorage.getItem('userDesignation') || prev.title,
           }));
+          fetchMeetings();
           setAuthPage('dashboard');
         }}
         onGoToSignUp={() => setAuthPage('signup')}
@@ -358,7 +360,9 @@ function App() {
             ...prev,
             name: name || localStorage.getItem('userName') || prev.name,
             email: localStorage.getItem('userEmail') || prev.email,
+            title: localStorage.getItem('userDesignation') || prev.title,
           }));
+          fetchMeetings();
           setAuthPage('dashboard');
         }}
         onGoToLogin={() => setAuthPage('login')}
@@ -1215,6 +1219,8 @@ function App() {
                   localStorage.removeItem('authToken');
                   localStorage.removeItem('userEmail');
                   localStorage.removeItem('userName');
+                  localStorage.removeItem('userDesignation');
+                  setMeetings([]);
                   setAuthPage('login');
                 }}
                 className="px-5 py-2 bg-[#ba1a1a] text-white rounded-lg text-xs font-semibold hover:bg-[#93000a] transition-colors"

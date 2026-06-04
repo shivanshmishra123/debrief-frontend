@@ -31,6 +31,7 @@ export default function LoginPage({ onLogin, onGoToSignUp }) {
       localStorage.setItem('authToken', data.token || '');
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userName', data.name || email.split('@')[0]);
+      localStorage.setItem('userDesignation', data.designation || '');
       onLogin(data);
     } catch (err) {
       setError(err.message);

@@ -4,6 +4,7 @@ export default function SignUpPage({ onSignUp, onGoToLogin }) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [designation, setDesignation] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -24,7 +25,7 @@ export default function SignUpPage({ onSignUp, onGoToLogin }) {
       const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: fullName, email, password }),
+        body: JSON.stringify({ name: fullName, email, password, designation }),
       });
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
@@ -34,6 +35,7 @@ export default function SignUpPage({ onSignUp, onGoToLogin }) {
       localStorage.setItem('authToken', data.token || '');
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userName', fullName);
+      localStorage.setItem('userDesignation', data.designation || '');
       onSignUp(data, fullName);
     } catch (err) {
       setError(err.message);
@@ -281,6 +283,23 @@ export default function SignUpPage({ onSignUp, onGoToLogin }) {
                   onBlur={(e) => (e.target.style.borderColor = '#E2E8F0')}
                 />
                 <p style={{ fontSize: '12px', color: '#747878', marginTop: '6px', marginBottom: 0 }}>Minimum 6 characters</p>
+              </div>
+
+              {/* Job Designation */}
+              <div>
+                <label htmlFor="signup-designation" style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#0b1c30', marginBottom: '8px' }}>
+                  Job Title / Designation <span style={{ fontWeight: 400, color: '#747878' }}>(optional)</span>
+                </label>
+                <input
+                  id="signup-designation"
+                  type="text"
+                  value={designation}
+                  onChange={(e) => setDesignation(e.target.value)}
+                  placeholder="e.g. Engineering Manager, Product Lead"
+                  style={inputStyle}
+                  onFocus={(e) => (e.target.style.borderColor = '#121212')}
+                  onBlur={(e) => (e.target.style.borderColor = '#E2E8F0')}
+                />
               </div>
 
               {/* Submit */}
