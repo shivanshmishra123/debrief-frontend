@@ -22,7 +22,8 @@ export default function SignUpPage({ onSignUp, onGoToLogin }) {
     setLoading(true);
     try {
       // Call Spring Boot register endpoint
-      const response = await fetch('/api/v1/auth/register', {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: fullName, email, password, designation }),

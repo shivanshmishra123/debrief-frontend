@@ -33,7 +33,10 @@ export async function authFetch(url, options = {}) {
     headers['Content-Type'] = 'application/json';
   }
 
-  const response = await fetch(url, {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+  const targetUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+
+  const response = await fetch(targetUrl, {
     ...options,
     headers,
   });
