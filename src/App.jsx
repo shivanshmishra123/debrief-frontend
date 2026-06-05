@@ -175,6 +175,9 @@ function App() {
 
     const formData = new FormData();
     formData.append('audio', selectedFile);
+    if (continuationMeetingId) {
+      formData.append('parentMeetingId', continuationMeetingId);
+    }
     
     // If it's a continuation, we append the parent context to title or headers
     let finalTitle = uploadTitle;
@@ -1079,8 +1082,13 @@ function App() {
                           <h4 className="text-xs font-bold uppercase tracking-wider text-[#006d35] mb-3">🟢 Decided Items</h4>
                           <div className="space-y-2">
                             {extractedItems.filter(item => item.type === 'DECISION').map((item, idx) => (
-                              <div key={idx} className="bg-white border border-[#E2E8F0] p-4 rounded-lg text-xs leading-relaxed">
-                                {item.content}
+                              <div key={idx} className={`bg-white border border-[#E2E8F0] p-4 rounded-lg text-xs leading-relaxed ${item.isDrifted ? 'line-through text-[#747878] opacity-60 bg-[#f8f9ff]' : ''}`}>
+                                <div className="flex justify-between items-center gap-2">
+                                  <span>{item.content}</span>
+                                  {item.isDrifted && (
+                                    <span className="bg-[#e5e5ea] text-[#1d1d1f] px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider flex-shrink-0">Superseded</span>
+                                  )}
+                                </div>
                               </div>
                             ))}
                             {extractedItems.filter(item => item.type === 'DECISION').length === 0 && (
@@ -1094,9 +1102,16 @@ function App() {
                           <h4 className="text-xs font-bold uppercase tracking-wider text-[#d97706] mb-3">🟠 Action Items</h4>
                           <div className="space-y-2">
                             {extractedItems.filter(item => item.type === 'ACTION_ITEM').map((item, idx) => (
-                              <div key={idx} className="bg-white border border-[#E2E8F0] p-4 rounded-lg text-xs leading-relaxed flex items-start gap-2">
-                                <span className="material-symbols-outlined text-[16px] mt-0.5 text-[#747878]">check_box_outline_blank</span>
-                                <span>{item.content}</span>
+                              <div key={idx} className={`bg-white border border-[#E2E8F0] p-4 rounded-lg text-xs leading-relaxed flex items-start gap-2 ${item.isDrifted ? 'line-through text-[#747878] opacity-60 bg-[#f8f9ff]' : ''}`}>
+                                <span className="material-symbols-outlined text-[16px] mt-0.5 text-[#747878]">
+                                  {item.isDrifted ? 'check_box' : 'check_box_outline_blank'}
+                                </span>
+                                <div className="flex-1 flex justify-between items-center gap-2">
+                                  <span>{item.content}</span>
+                                  {item.isDrifted && (
+                                    <span className="bg-[#e5e5ea] text-[#1d1d1f] px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider flex-shrink-0">Drifted</span>
+                                  )}
+                                </div>
                               </div>
                             ))}
                             {extractedItems.filter(item => item.type === 'ACTION_ITEM').length === 0 && (
@@ -1110,8 +1125,13 @@ function App() {
                           <h4 className="text-xs font-bold uppercase tracking-wider text-[#6366F1] mb-3">🔵 Open Questions</h4>
                           <div className="space-y-2">
                             {extractedItems.filter(item => item.type === 'OPEN_QUESTION').map((item, idx) => (
-                              <div key={idx} className="bg-white border border-[#E2E8F0] p-4 rounded-lg text-xs leading-relaxed">
-                                ❓ {item.content}
+                              <div key={idx} className={`bg-white border border-[#E2E8F0] p-4 rounded-lg text-xs leading-relaxed ${item.isDrifted ? 'line-through text-[#747878] opacity-60 bg-[#f8f9ff]' : ''}`}>
+                                <div className="flex justify-between items-center gap-2">
+                                  <span>❓ {item.content}</span>
+                                  {item.isDrifted && (
+                                    <span className="bg-[#e5e5ea] text-[#1d1d1f] px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider flex-shrink-0">Resolved</span>
+                                  )}
+                                </div>
                               </div>
                             ))}
                             {extractedItems.filter(item => item.type === 'OPEN_QUESTION').length === 0 && (
