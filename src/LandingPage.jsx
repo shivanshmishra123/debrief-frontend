@@ -91,10 +91,10 @@ export default function LandingPage({ onGetStarted, onLogin }) {
           style={{ background: 'radial-gradient(circle at 50% -20%, #eff4ff 0%, #f8f9ff 100%)' }}
         >
           <div className="max-w-[1440px] mx-auto text-center mb-24">
-            <div className="inline-flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full px-4 py-1.5 mb-8 text-xs font-semibold text-[#006d35] shadow-sm">
+            {/* <div className="inline-flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full px-4 py-1.5 mb-8 text-xs font-semibold text-[#006d35] shadow-sm">
               <span className="w-2 h-2 bg-[#006d35] rounded-full animate-pulse"></span>
               AI-Powered Meeting Intelligence — Now Live
-            </div>
+            </div> */}
 
             <h1 className="text-4xl md:text-6xl font-bold text-[#121212] mb-6 max-w-4xl mx-auto leading-tight">
               Unlock the Hidden Intelligence in Every Conversation.
@@ -151,9 +151,8 @@ export default function LandingPage({ onGetStarted, onLogin }) {
                   {['Home', 'All Meetings', 'My Profile'].map((item, i) => (
                     <div
                       key={item}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
-                        i === 0 ? 'bg-white/10 text-white border-l-2 border-[#006d35]' : 'text-white/50'
-                      }`}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${i === 0 ? 'bg-white/10 text-white border-l-2 border-[#006d35]' : 'text-white/50'
+                        }`}
                     >
                       <div className="w-4 h-4 bg-white/20 rounded"></div>
                       {item}
