@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { authFetch } from './authFetch';
 import LoginPage from './LoginPage';
 import SignUpPage from './SignUpPage';
+import LandingPage from './LandingPage';
 
 function App() {
-  // Auth routing: 'login' | 'signup' | 'dashboard'
+  // Auth routing: 'landing' | 'login' | 'signup' | 'dashboard'
   const [authPage, setAuthPage] = useState(() => {
-    return localStorage.getItem('authToken') ? 'dashboard' : 'login';
+    return localStorage.getItem('authToken') ? 'dashboard' : 'landing';
   });
 
   // Navigation Tabs: 'home' | 'meetings' | 'profile'
@@ -336,7 +337,16 @@ function App() {
     return result;
   };
 
-  // Auth gating — show login/signup before the dashboard
+  // Auth gating — show landing/login/signup before the dashboard
+  if (authPage === 'landing') {
+    return (
+      <LandingPage
+        onGetStarted={() => setAuthPage('login')}
+        onLogin={() => setAuthPage('login')}
+      />
+    );
+  }
+
   if (authPage === 'login') {
     return (
       <LoginPage
